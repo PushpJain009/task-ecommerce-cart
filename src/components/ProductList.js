@@ -18,12 +18,15 @@ const ProductList = () => {
       <div className="product-grid">
         {products.map((product) => (
           <div key={product.id} className="product-item">
-            <Link to={`/product/${product.id}`}>
+            <Link to={`/product/${product.id}`} className="product-title">
               <img src={product.image} alt={product.title} />
               <h3>{product.title}</h3>
             </Link>
             <p>${product.price}</p>
-            <button onClick={() => dispatch(addToCart(product))}>
+            <button
+              onClick={() => dispatch(addToCart(product))}
+              className="add-to-cart-button"
+            >
               Add to Cart
             </button>
           </div>

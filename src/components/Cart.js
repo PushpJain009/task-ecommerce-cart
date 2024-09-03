@@ -1,15 +1,27 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "../slices/cartSlice";
+import { removeFromCart, updateQuantity } from "../slices/cartSlice";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
   };
+
+  const handleQuantityChange = (id, quantity) => {
+    if (quantity <= 0) {
+      handleRemove(id);
+    } else {
+      dispatch(updateQuantity({ id, quantity }));
+    }
+  };
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="cart">
@@ -23,6 +35,7 @@ const Cart = () => {
               <tr>
                 <th>Product</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -30,7 +43,18 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <tr key={item.id} className="cart-item">
                   <td>{item.title}</td>
-                  <td>${item.price}</td>
+                  <td>${item.price.toFixed(2)}</td>
+                  <td>
+                    <input
+                      type="number"
+                      min="1"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleQuantityChange(item.id, parseInt(e.target.value))
+                      }
+                      className="quantity-input"
+                    />
+                  </td>
                   <td>
                     <button onClick={() => handleRemove(item.id)}>
                       Remove
