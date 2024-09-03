@@ -26,7 +26,7 @@ To get started with this project, follow these steps:
    **_or_**
 
    ```bash
-   npm is
+   npm i
 
    ```
 
